@@ -1,0 +1,21 @@
+
+---
+# tasks file for tools_mediawiki
+- name: "install de package"
+  apt:
+   name: "{{ item }}"
+   update_cache: yes
+   state: present
+  with_items:
+    - apache2
+    - mariadb-server
+    - php
+    - php-mysql
+    - libapache2-mod-php
+    - php-xml
+    - php-mbstring
+    - tar
+    - zip
+    - unzip
+    - python3-pymysql
+    - tree

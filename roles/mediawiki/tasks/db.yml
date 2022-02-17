@@ -1,0 +1,13 @@
+- name: Create database user with name 'client2' and password 'client2' with all database privileges
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: client2
+    password: client2
+    priv: '*.*:ALL'
+    state: present
+
+- name: Create a new database with name 'client2db'
+  mysql_db:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: client2db
+    state: present

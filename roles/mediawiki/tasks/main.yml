@@ -1,0 +1,43 @@
+---
+# tasks file for mediawiki
+- name: ajout php
+  include: php.yml
+
+- name: Download paquet mediawiki
+  get_url:
+    url: https://releases.wikimedia.org/mediawiki/1.37/mediawiki-1.37.1.tar.gz
+    dest: /tmp/
+    mode: '777'
+
+- name: Extract /tmp/mediawiki-*.tar.gz into /var/lib/mediawiki-1.37.1
+  become: true
+  ansible.builtin.unarchive:
+    src: /tmp/mediawiki-1.37.1.tar.gz
+    dest: /var/lib/
+    remote_src: yes
+    extra_opts:
+     - '-z'
+
+- name: ajout database config
+  include: db.yml
+
+- name: lien symbolique de /var/lib/mediawiki /var/www/html/mediawiki 
+  file:
+    src: /var/lib/mediawiki-1.37.1
+    dest: /var/www/html/mediawiki-1.37.1 
+    state: link 
+
+- name: redemarrage de php et apache2
+  shell:
+    cmd: phpenmod mbstring
+
+- name: redemarrage de php et apache2
+  shell:
+    cmd: phpenmod xml
+  notify: apache2 reload
+
+- name: mv LocalSettings.php into /var/www/mediawiki-1.37.1
+  template:
+    src: templates/LocalSettings.php
+    dest: /var/www/html/mediawiki-1.37.1
+    force: yes

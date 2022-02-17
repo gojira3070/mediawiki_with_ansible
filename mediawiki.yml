@@ -1,0 +1,7 @@
+---
+- name: "install de mediawiki"
+  hosts: 172.31.34.30 #client2
+
+  roles:
+    - tools_mediawiki
+    - mediawiki   
